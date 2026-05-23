@@ -38,12 +38,12 @@ The vouchers represented the right to buy Velvetfruit Extract at a specific stri
 The strategy was developed using the Round 3 database files:
 
 ```text
-../../sources/round_3/prices_round_3_day_0.csv
-../../sources/round_3/prices_round_3_day_1.csv
-../../sources/round_3/prices_round_3_day_2.csv
-../../sources/round_3/trades_round_3_day_0.csv
-../../sources/round_3/trades_round_3_day_1.csv
-../../sources/round_3/trades_round_3_day_2.csv
+../../datasets/round3/prices_round_3_day_0.csv
+../../datasets/round3/prices_round_3_day_1.csv
+../../datasets/round3/prices_round_3_day_2.csv
+../../datasets/round3/trades_round_3_day_0.csv
+../../datasets/round3/trades_round_3_day_1.csv
+../../datasets/round3/trades_round_3_day_2.csv
 ```
 
 These files were used to calibrate fair-value anchors, voucher strike behavior, and implied-volatility parameters.
