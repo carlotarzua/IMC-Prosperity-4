@@ -38,12 +38,12 @@ The algorithm needed to generate profit from the historical order-book structure
 The strategy was developed using the Round 1 public database files:
 
 ```text
-../../sources/round_1/prices_round_1_day_-2.csv
-../../sources/round_1/prices_round_1_day_-1.csv
-../../sources/round_1/prices_round_1_day_0.csv
-../../sources/round_1/trades_round_1_day_-2.csv
-../../sources/round_1/trades_round_1_day_-1.csv
-../../sources/round_1/trades_round_1_day_0.csv
+../../datasets/round1/prices_round_1_day_-2.csv
+../../datasets/round1/prices_round_1_day_-1.csv
+../../datasets/round1/prices_round_1_day_0.csv
+../../datasets/round1/trades_round_1_day_-2.csv
+../../datasets/round1/trades_round_1_day_-1.csv
+../../datasets/round1/trades_round_1_day_0.csv
 ```
 
 These files were used to inspect mid-price behavior, spreads, fills, and the relationship between timestamp and product value.
