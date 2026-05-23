@@ -10,14 +10,8 @@ class Trader:
         "INTARIAN_PEPPER_ROOT": 80,
     }
 
-    # Blind-auction bid for extra 25% flow.
-    # Without knowing the field's median bid, this is a compromise:
-    # high enough to have a decent chance of clearing, low enough to avoid
-    # burning too much one-time PnL.
     def bid(self):
         return 12000
-
-    # ------------------------- state helpers -------------------------
 
     def _load_data(self, trader_data: str) -> Dict:
         if not trader_data:
@@ -69,7 +63,6 @@ class Trader:
         total = buy_v + sell_v
         if total == 0:
             return fallback
-        # Standard top-of-book microprice weighting.
         return (ba * buy_v + bb * sell_v) / total
 
     def _update_history(self, data: Dict, product: str, price: Optional[float], max_len: int = 200) -> None:
@@ -119,8 +112,6 @@ class Trader:
     def _clamp_sell(self, product: str, pos: int, pending_sell: int, qty: int) -> int:
         return max(0, min(qty, self.LIMIT[product] + pos - pending_sell))
 
-    # ------------------------- execution primitives -------------------------
-
     def _take_best(
         self,
         product: str,
@@ -133,7 +124,6 @@ class Trader:
         orders: List[Order],
         max_take_per_side: int,
     ) -> Tuple[int, int]:
-        # Buy cheap asks.
         bought = 0
         for ask in sorted(od.sell_orders.keys()):
             if ask > fair - take_width:
@@ -149,7 +139,6 @@ class Trader:
             if bought >= max_take_per_side:
                 break
 
-        # Sell rich bids.
         sold = 0
         for bid in sorted(od.buy_orders.keys(), reverse=True):
             if bid < fair + take_width:
@@ -180,7 +169,6 @@ class Trader:
     ) -> Tuple[int, int]:
         net_after_take = pos + pending_buy - pending_sell
         if net_after_take > 0:
-            # Long -> clear into reasonably good bids.
             clearable = 0
             for bid, bid_qty in od.buy_orders.items():
                 if bid >= fair + clear_width:
@@ -191,7 +179,6 @@ class Trader:
                 orders.append(Order(product, int(round(fair + clear_width)), int(-qty)))
                 pending_sell += qty
         elif net_after_take < 0:
-            # Short -> clear into reasonably good asks.
             clearable = 0
             for ask, ask_qty in od.sell_orders.items():
                 if ask <= fair - clear_width:
@@ -221,8 +208,6 @@ class Trader:
         bb, _ = self._best_bid(od)
         ba, _ = self._best_ask(od)
 
-    # ------------------------- product logic -------------------------
-
     def _trade_ipr(self, state: TradingState, data: Dict) -> List[Order]:
         product = "INTARIAN_PEPPER_ROOT"
         od = state.order_depths.get(product)
@@ -237,8 +222,6 @@ class Trader:
         self._update_history(data, product, mid, max_len=160)
         hist = data.get(product, {}).get("mid_history", [])
 
-        # Main model: rolling linear-regression fair. If we do not have enough
-        # history yet, fall back to a small positive-drift estimate.
         fair = self._linreg_forecast(hist, lookback=min(120, len(hist)), horizon_steps=3)
         if fair is None and mid is not None:
             fair = mid + 0.3
@@ -249,12 +232,6 @@ class Trader:
         orders: List[Order] = []
         bb, _ = self._best_bid(od)
         ba, _ = self._best_ask(od)
-
-        # Target inventory: get long quickly because the product is strongly
-        # upward trending in the round-1 data and the round notes say buy/hold
-        # is close to ideal.
-        # We still avoid obviously bad prices and we stop aggressively buying
-        # once we are close to the limit.
         pending_buy = 0
         target = 80
         capacity = max(0, target - pos)
@@ -263,7 +240,6 @@ class Trader:
             for ask in sorted(od.sell_orders.keys()):
                 if capacity <= 0:
                     break
-                # Buy asks that are not too far above fair.
                 if ask > fair + 8:
                     break
                 ask_qty = abs(od.sell_orders[ask])
@@ -275,8 +251,6 @@ class Trader:
                 pending_buy += qty
                 capacity -= qty
 
-        # Once long, do not market-make on both sides. Only leave a passive ask
-        # above fair so we do not accidentally bleed out inventory.
         if pos + pending_buy >= 65:
             offer_qty = min(8, pos + pending_buy)
             if offer_qty > 0:
@@ -303,9 +277,6 @@ class Trader:
         self._update_history(data, product, obs, max_len=220)
         hist = data.get(product, {}).get("mid_history", [])
 
-        # ASH behaved like a stable/mean-reverting asset around ~10000 in the
-        # round-1 files, with a wide spread. Use a denoised fair and trade both
-        # spread capture and deviations from fair.
         ema_fast = self._ema(hist[-30:], 0.25) if hist else None
         ema_slow = self._ema(hist[-120:], 0.08) if hist else None
         if ema_fast is None and ema_slow is None:
@@ -317,7 +288,6 @@ class Trader:
         else:
             fair = 0.6 * ema_fast + 0.4 * ema_slow
 
-        # Gentle anchor toward the known central level from round-1 data.
         fair = 0.8 * fair + 0.2 * 10000.0
 
         pos = state.position.get(product, 0)
@@ -329,7 +299,6 @@ class Trader:
         ba, _ = self._best_ask(od)
         spread = (ba - bb) if bb is not None and ba is not None else 16
 
-        # 1) TAKE: exploit obvious mispricings.
         take_width = max(4.0, spread / 3.0)
         pending_buy, pending_sell = self._take_best(
             product,
@@ -343,7 +312,6 @@ class Trader:
             max_take_per_side=24,
         )
 
-        # 2) CLEAR: if we already carry inventory, flatten opportunistically near fair.
         pending_buy, pending_sell = self._clear_near_fair(
             product,
             od,
@@ -355,10 +323,9 @@ class Trader:
             orders=orders,
         )
 
-        # 3) MAKE: quote inside the spread with inventory skew.
         net_pos = pos + pending_buy - pending_sell
         inv_ratio = net_pos / self.LIMIT[product]
-        skew = int(round(inv_ratio * 4))  # up to ~4 ticks of skew.
+        skew = int(round(inv_ratio * 4)) 
 
         if bb is not None:
             bid_px = bb + 1
@@ -400,8 +367,6 @@ class Trader:
             orders.append(Order(product, int(ask_px), int(-sell_qty)))
 
         return orders
-
-    # ------------------------- main -------------------------
 
     def run(self, state: TradingState):
         data = self._load_data(state.traderData)
