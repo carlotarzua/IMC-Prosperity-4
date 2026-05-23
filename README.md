@@ -38,26 +38,6 @@ I competed with my team **Oops We Did It Again** and finished:
 
 ---
 
-## 🏅 Selected Competition Badges
-
-These are the badges most relevant to the project as a software and trading portfolio piece.
-
-<table>
-  <tr>
-    <td align="center"><img src="assets/badges/smooth-operator.png" width="360"><br><b>Smooth Operator</b><br>Submitted Python programs without errors.</td>
-    <td align="center"><img src="assets/badges/performance-key-profit.png" width="360"><br><b>Performance Is the Key to Profit</b><br>Downloaded and analyzed performance results.</td>
-  </tr>
-  <tr>
-    <td align="center"><img src="assets/badges/consistency-is-key.png" width="360"><br><b>Consistency Is Key</b><br>Uploaded eligible Python programs across rounds.</td>
-    <td align="center"><img src="assets/badges/one-is-luck-two-is-skill.png" width="360"><br><b>One Is Luck. Two Is Skill.</b><br>Generated profit in consecutive trading rounds.</td>
-  </tr>
-  <tr>
-    <td align="center" colspan="2"><img src="assets/badges/go-big-or-go-home.png" width="520"><br><b>Go Big or Go Home</b><br>Unlocked a large outpost building during the competition.</td>
-  </tr>
-</table>
-
----
-
 ## 🛠️ Tech Stack
 
 | Component | Technology / Method |
