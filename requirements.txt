@@ -1,0 +1,2 @@
+# The submitted strategies use only the Python standard library.
+# They require IMC Prosperity's competition-provided datamodel.py to run.
