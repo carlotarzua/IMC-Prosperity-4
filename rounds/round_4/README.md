@@ -38,9 +38,9 @@ The new task was to incorporate counterparty information from historical and liv
 The repository includes the Round 4 price database:
 
 ```text
-../../sources/round_4/prices_round_4_day_1.csv
-../../sources/round_4/prices_round_4_day_2.csv
-../../sources/round_4/prices_round_4_day_3.csv
+../../datasets/round4/prices_round_4_day_1.csv
+../../datasets/round4/prices_round_4_day_2.csv
+../../datasets/round4/prices_round_4_day_3.csv
 ```
 
 The final algorithm also uses live trade data fields:
