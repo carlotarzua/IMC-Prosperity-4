@@ -209,7 +209,6 @@ imc-prosperity-4/
 ├── README.md
 ├── LICENSE
 ├── requirements.txt
-├── .gitignore
 │
 ├── algorithms/
 │   ├── round_1_trader.py
@@ -230,25 +229,13 @@ imc-prosperity-4/
 │   └── round_5/
 │       └── README.md
 │
-├── docs/
-│   ├── INDEX.md
-│   ├── round_instructions.md
-│   ├── strategy_overview.md
-│   └── round_5_pattern_discovery.md
-│
-├── sources/
+├── datasets/
 │   ├── README.md
 │   ├── round_1/
 │   ├── round_2/
 │   ├── round_3/
 │   ├── round_4/
 │   └── round_5/
-│
-├── scripts/
-│   └── summarize_sources.py
-│
-├── notebooks/
-│   └── .gitkeep
 │
 └── assets/
     ├── media/
