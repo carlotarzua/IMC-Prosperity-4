@@ -38,12 +38,12 @@ The new challenge was deciding how much to bid for extra market access while imp
 The strategy was developed using the Round 2 database files:
 
 ```text
-../../sources/round_2/prices_round_2_day_-1.csv
-../../sources/round_2/prices_round_2_day_0.csv
-../../sources/round_2/prices_round_2_day_1.csv
-../../sources/round_2/trades_round_2_day_-1.csv
-../../sources/round_2/trades_round_2_day_0.csv
-../../sources/round_2/trades_round_2_day_1.csv
+../../datasets/round2/prices_round_2_day_-1.csv
+../../datasets/round2/prices_round_2_day_0.csv
+../../datasets/round2/prices_round_2_day_1.csv
+../../datasets/round2/trades_round_2_day_-1.csv
+../../datasets/round2/trades_round_2_day_0.csv
+../../datasets/round2/trades_round_2_day_1.csv
 ```
 
 The Round 1 behavior was also useful as background for understanding spread width, mean reversion, and directional drift.
