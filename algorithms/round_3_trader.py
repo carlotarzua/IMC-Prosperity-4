@@ -33,7 +33,6 @@ class Trader:
         "VEV_6500": 6500,
     }
 
-    # Historical fit for IV = a*m^2 + b*m + c, where m = log(K/S)/sqrt(T).
     SMILE_A = 0.028259203050341634
     SMILE_B = 0.0024601685462392114
     SMILE_C = 0.23953346206705442
@@ -66,15 +65,10 @@ class Trader:
     }
 
     OPTION_TAKE_EDGE = {
-        # Deep-ITM options are tiny net contributors but can be negative on some days.
-        # Make them more selective instead of disabling them completely.
         4000: 1.75,
         4500: 1.75,
-        # Keep the profitable 5000/5100 complex active; 5000 is made a touch
-        # more active to compensate for reducing the deep-ITM noise.
         5000: 0.60,
         5100: 0.65,
-        # Revert these to the more stable baseline settings.
         5200: 1.50,
         5300: 2.50,
         5400: 0.75,
@@ -89,8 +83,6 @@ class Trader:
         5500: 1.0,
     }
     OPTION_LOT = {
-        # Smaller lots on the deep-ITM calls: they are low-alpha and mostly
-        # useful only when there is a very clear visible-book edge.
         4000: 12,
         4500: 12,
         5000: 24,
@@ -101,8 +93,6 @@ class Trader:
         5500: 18,
     }
 
-    # Risk/profit-lock layer. These are not timestamp/path rules; they react
-    # only to the strategy's own live mark-to-market PnL and current inventory.
     DISABLED_OPTION_STRIKES = {5500}
     PROFIT_LOCK_MIN_PEAK = 2500.0
     DEFENSIVE_DRAWDOWN_ABS = 2500.0
@@ -124,8 +114,6 @@ class Trader:
             for product, depth in state.order_depths.items()
         }
 
-        # Update light EMA state for passive quote anchoring. The taker layer
-        # intentionally keeps fixed anchors because the public data mean-reverts.
         ema = memory.setdefault("ema", {})
         for product, mid in mids.items():
             if mid is None:
