@@ -338,6 +338,13 @@ The historical databases were used to estimate fair values, inspect spreads, ide
 
 ---
 
+# 🙌 Acknowledgements
+
+I competed in IMC Prosperity 4 with my team Oops We Did It Again.
+I was responsible for the algorithmic trading challenges and the Python Trader implementations in this repository. My teammate worked on the manual trading challenges and also shared ideas during the competition that helped with strategy discussions.
+This repository focuses on the algorithmic work I developed and submitted.
+
+---
 ## 🌱 Future Improvements
 
 - [ ] Add cleaned Jupyter notebooks showing the Round 5 pattern-discovery process
